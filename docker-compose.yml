@@ -17,7 +17,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      DATABASE_URL: postgresql://user:password@postgres/finance_db
+      DATABASE_URL: "postgresql://neondb_owner:npg_C0thduObx1HW@ep-dark-block-ad3f9qph-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
     depends_on:
       - postgres
     volumes:
@@ -28,7 +28,7 @@ services:
     ports:
       - "5173:5173"
     environment:
-      VITE_API_URL: http://localhost:8000
+      VITE_API_URL: https://ismvk-backend.onrender.com
     depends_on:
       - backend
     volumes:
