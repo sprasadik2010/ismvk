@@ -36,9 +36,12 @@ export const TransactionForm: React.FC<Props> = ({ department, onSubmit, onCance
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Format the date to include time (ISO 8601 format with T)
+    const formattedDate = `${formData.date}T00:00:00`;
+
     // Convert form data to match Transaction type
     const transactionData: Omit<Transaction, 'id' | 'created_at'> = {
-      date: formData.date, // Keep as string (YYYY-MM-DD format)
+      date: formattedDate, // Now in correct format: YYYY-MM-DDTHH:MM:SS
       description: formData.description,
       amount: parseFloat(formData.amount),
       type: formData.type as 'INCOME' | 'EXPENDITURE',
@@ -52,7 +55,6 @@ export const TransactionForm: React.FC<Props> = ({ department, onSubmit, onCance
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {/* Rest of the form remains the same */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Date
@@ -64,6 +66,7 @@ export const TransactionForm: React.FC<Props> = ({ department, onSubmit, onCance
           onChange={(e) => setFormData({ ...formData, date: e.target.value })}
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
+        <p className="text-xs text-gray-500 mt-1">Select date (time will be set to 00:00:00 automatically)</p>
       </div>
 
       <div>
