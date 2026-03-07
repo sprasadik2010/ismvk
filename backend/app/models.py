@@ -3,8 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from datetime import datetime
 import enum
-
-Base = declarative_base()
+from .database import Base
 
 class DepartmentEnum(str, enum.Enum):
     ILLAM = "ILLAM"
