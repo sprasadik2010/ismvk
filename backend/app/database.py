@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/ismvk_db")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://neondb_owner:npg_C0thduObx1HW@ep-dark-block-ad3f9qph-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

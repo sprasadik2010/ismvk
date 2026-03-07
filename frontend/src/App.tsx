@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Dashboard } from './components/Dashboard';
 import { TransactionList } from './components/TransactionList';
 import { TransactionForm } from './components/TransactionForm';
