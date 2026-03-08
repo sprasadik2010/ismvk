@@ -18,6 +18,7 @@ function App() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const [showCategoryManager, setShowCategoryManager] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -54,8 +55,62 @@ function App() {
       fetchTransactions();
       fetchDashboardData();
       setShowForm(false);
+      setEditingTransaction(null);
     } catch (error) {
       console.error('Error adding transaction:', error);
+      alert('Failed to add transaction. Please try again.');
+    }
+  };
+
+  const handleEditTransaction = async (transaction: Transaction) => {
+    try {
+      // Format date properly for the form
+      // const formattedDate = new Date(transaction.date).toISOString().split('T')[0];
+      
+      // Set form data for editing
+      setEditingTransaction(transaction);
+      setShowForm(true);
+      
+      // Note: You'll need to pass the editing transaction to TransactionForm
+      // You may need to modify TransactionForm to accept an optional transaction prop
+    } catch (error) {
+      console.error('Error preparing edit:', error);
+    }
+  };
+
+  const handleUpdateTransaction = async (id: number, transaction: Omit<Transaction, 'id' | 'created_at'>) => {
+    try {
+      await api.updateTransaction(id, transaction);
+      fetchTransactions();
+      fetchDashboardData();
+      setShowForm(false);
+      setEditingTransaction(null);
+    } catch (error) {
+      console.error('Error updating transaction:', error);
+      alert('Failed to update transaction. Please try again.');
+    }
+  };
+
+  const handleDeleteTransaction = async (id: number) => {
+    if (!window.confirm('Are you sure you want to delete this transaction?')) {
+      return;
+    }
+    
+    try {
+      await api.deleteTransaction(id);
+      await fetchTransactions(); // Refresh list
+      await fetchDashboardData(); // Refresh dashboard
+    } catch (error) {
+      console.error('Error deleting transaction:', error);
+      alert('Failed to delete transaction. Please try again.');
+    }
+  };
+
+  const handleFormSubmit = async (transaction: Omit<Transaction, 'id' | 'created_at'>) => {
+    if (editingTransaction) {
+      await handleUpdateTransaction(editingTransaction.id, transaction);
+    } else {
+      await handleAddTransaction(transaction);
     }
   };
 
@@ -83,7 +138,10 @@ function App() {
                 Categories
               </button>
               <button
-                onClick={() => setShowForm(true)}
+                onClick={() => {
+                  setEditingTransaction(null);
+                  setShowForm(true);
+                }}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm flex items-center"
               >
                 <span className="mr-1">+</span>
@@ -126,6 +184,7 @@ function App() {
             </button>
             <button
               onClick={() => {
+                setEditingTransaction(null);
                 setShowForm(true);
                 setIsMobileMenuOpen(false);
               }}
@@ -163,7 +222,11 @@ function App() {
                   <DateRangePicker range={dateRange} onChange={setDateRange} />
                 </div>
               </div>
-              <TransactionList transactions={transactions} />
+              <TransactionList
+                transactions={transactions}
+                onEdit={handleEditTransaction}
+                onDelete={handleDeleteTransaction}
+              />
             </div>
           </div>
 
@@ -179,7 +242,10 @@ function App() {
 
         {/* Mobile Floating Action Button - Only on mobile */}
         <button
-          onClick={() => setShowForm(true)}
+          onClick={() => {
+            setEditingTransaction(null);
+            setShowForm(true);
+          }}
           className="fixed bottom-6 right-6 md:hidden bg-blue-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg hover:bg-blue-700 transition-colors z-30"
         >
           <span className="text-2xl">+</span>
@@ -191,9 +257,14 @@ function App() {
             <div className="bg-white rounded-t-xl md:rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
               <div className="p-4 sm:p-6">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-semibold">Add New Transaction</h3>
+                  <h3 className="text-lg font-semibold">
+                    {editingTransaction ? 'Edit Transaction' : 'Add New Transaction'}
+                  </h3>
                   <button
-                    onClick={() => setShowForm(false)}
+                    onClick={() => {
+                      setShowForm(false);
+                      setEditingTransaction(null);
+                    }}
                     className="p-2 hover:bg-gray-100 rounded-lg"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -203,8 +274,20 @@ function App() {
                 </div>
                 <TransactionForm
                   department={selectedDepartment}
-                  onSubmit={handleAddTransaction}
-                  onCancel={() => setShowForm(false)}
+                  onSubmit={handleFormSubmit}
+                  onCancel={() => {
+                    setShowForm(false);
+                    setEditingTransaction(null);
+                  }}
+                  initialData={editingTransaction ? {
+                    date: new Date(editingTransaction.date).toISOString().split('T')[0],
+                    description: editingTransaction.description,
+                    amount: editingTransaction.amount.toString(),
+                    type: editingTransaction.type,
+                    category_id: editingTransaction.category_id.toString(),
+                    notes: editingTransaction.notes || '',
+                    department: editingTransaction.department
+                  } : undefined}
                 />
               </div>
             </div>

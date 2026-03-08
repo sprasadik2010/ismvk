@@ -6,23 +6,52 @@ interface Props {
   department: Department;
   onSubmit: (transaction: Omit<Transaction, 'id' | 'created_at'>) => void;
   onCancel: () => void;
+  initialData?: {
+    date: string;
+    description: string;
+    amount: string;
+    type: string;
+    category_id: string;
+    notes: string;
+    department: Department;
+  };
 }
 
-export const TransactionForm: React.FC<Props> = ({ department, onSubmit, onCancel }) => {
+export const TransactionForm: React.FC<Props> = ({ 
+  department, 
+  onSubmit, 
+  onCancel,
+  initialData 
+}) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [formData, setFormData] = useState({
-    date: new Date().toISOString().split('T')[0],
-    description: '',
-    amount: '',
-    type: 'INCOME',
-    category_id: '',
-    notes: '',
+    date: initialData?.date || new Date().toISOString().split('T')[0],
+    description: initialData?.description || '',
+    amount: initialData?.amount || '',
+    type: initialData?.type || 'INCOME',
+    category_id: initialData?.category_id || '',
+    notes: initialData?.notes || '',
     department
   });
 
   useEffect(() => {
     fetchCategories();
   }, [department]);
+
+  useEffect(() => {
+    // Update form data when initialData changes (for edits)
+    if (initialData) {
+      setFormData({
+        date: initialData.date,
+        description: initialData.description,
+        amount: initialData.amount,
+        type: initialData.type,
+        category_id: initialData.category_id,
+        notes: initialData.notes,
+        department
+      });
+    }
+  }, [initialData, department]);
 
   const fetchCategories = async () => {
     try {
@@ -41,7 +70,7 @@ export const TransactionForm: React.FC<Props> = ({ department, onSubmit, onCance
 
     // Convert form data to match Transaction type
     const transactionData: Omit<Transaction, 'id' | 'created_at'> = {
-      date: formattedDate, // Now in correct format: YYYY-MM-DDTHH:MM:SS
+      date: formattedDate,
       description: formData.description,
       amount: parseFloat(formData.amount),
       type: formData.type as 'INCOME' | 'EXPENDITURE',
@@ -148,7 +177,7 @@ export const TransactionForm: React.FC<Props> = ({ department, onSubmit, onCance
           type="submit"
           className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
         >
-          Save Transaction
+          {initialData ? 'Update Transaction' : 'Save Transaction'}
         </button>
         <button
           type="button"
