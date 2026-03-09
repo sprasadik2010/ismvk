@@ -222,16 +222,22 @@ def get_dashboard_data(
     
     result = {}
     for dept in schemas.DepartmentEnum:
-        # Get recent transactions for this department
+        # 1. Get ALL transactions for totals (with date filter)
+        all_transactions = db.query(models.Transaction).filter(
+            models.Transaction.department == dept,
+            models.Transaction.date >= start_date
+        ).all()
+        
+        # Calculate totals from ALL transactions
+        total_income = sum(t.amount for t in all_transactions if t.type == "INCOME")
+        total_expenditure = sum(t.amount for t in all_transactions if t.type == "EXPENDITURE")
+        balance = total_income - total_expenditure
+        
+        # 2. Get just 5 most recent for display (with same date filter)
         recent_transactions = db.query(models.Transaction).filter(
             models.Transaction.department == dept,
             models.Transaction.date >= start_date
         ).order_by(models.Transaction.date.desc()).limit(5).all()
-        
-        # Calculate totals
-        total_income = sum(t.amount for t in recent_transactions if t.type == "INCOME")
-        total_expenditure = sum(t.amount for t in recent_transactions if t.type == "EXPENDITURE")
-        balance = total_income - total_expenditure
         
         result[dept.value] = {
             "balance": balance,

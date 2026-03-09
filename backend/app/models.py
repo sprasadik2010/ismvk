@@ -6,8 +6,8 @@ import enum
 from .database import Base
 
 class DepartmentEnum(str, enum.Enum):
-    ILLAM = "ILLAM"
     AMBALAM = "AMBALAM"
+    ILLAM = "ILLAM"
 
 class TransactionType(str, enum.Enum):
     INCOME = "INCOME"

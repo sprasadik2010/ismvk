@@ -4,8 +4,8 @@ from typing import Optional, List
 from enum import Enum
 
 class DepartmentEnum(str, Enum):
-    ILLAM = "ILLAM"
     AMBALAM = "AMBALAM"
+    ILLAM = "ILLAM"
 
 class TransactionTypeEnum(str, Enum):
     INCOME = "INCOME"

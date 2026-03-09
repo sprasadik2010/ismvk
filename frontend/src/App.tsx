@@ -10,7 +10,7 @@ import { type Transaction, type Department, type DateRange, type DashboardData }
 import { CategoryManager } from './components/CategoryManager';
 
 function App() {
-  const [selectedDepartment, setSelectedDepartment] = useState<Department>('ILLAM');
+  const [selectedDepartment, setSelectedDepartment] = useState<Department>('AMBALAM');
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: new Date(new Date().setDate(new Date().getDate() - 30)),
     endDate: new Date()
@@ -133,7 +133,7 @@ function App() {
               />
               <button
                 onClick={() => setShowCategoryManager(true)}
-                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm"
+                className="px-4 py-2 bg-blue-400  text-white border border-gray-300 text-gray-700 rounded-lg hover:bg-blue-600 transition-colors text-sm"
               >
                 Categories
               </button>
@@ -142,7 +142,7 @@ function App() {
                   setEditingTransaction(null);
                   setShowForm(true);
                 }}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm flex items-center"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-900 transition-colors text-sm flex items-center"
               >
                 <span className="mr-1">+</span>
                 <span>Add</span>

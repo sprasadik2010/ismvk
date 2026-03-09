@@ -45,6 +45,6 @@ export interface DepartmentData {
 }
 
 export interface DashboardData {
-  ILLAM: DepartmentData;
   AMBALAM: DepartmentData;
+  ILLAM: DepartmentData;
 }

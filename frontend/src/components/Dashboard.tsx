@@ -10,21 +10,6 @@ interface Props {
 export const Dashboard: React.FC<Props> = ({ data, selectedDepartment }) => {
   // Define department configurations
   const departmentConfig = {
-    ILLAM: {
-      name: 'ILLAM',
-      icon: Home,
-      primaryColor: 'emerald',
-      secondaryColor: 'teal',
-      lightBg: 'bg-emerald-50',
-      mediumBg: 'bg-emerald-100',
-      darkBg: 'bg-emerald-200',
-      textPrimary: 'text-emerald-700',
-      textSecondary: 'text-emerald-600',
-      gradientFrom: 'from-emerald-500',
-      gradientTo: 'to-teal-500',
-      borderColor: 'border-emerald-500',
-      iconColor: 'text-emerald-600'
-    },
     AMBALAM: {
       name: 'AMBALAM',
       icon: Building2,
@@ -39,6 +24,21 @@ export const Dashboard: React.FC<Props> = ({ data, selectedDepartment }) => {
       gradientTo: 'to-indigo-500',
       borderColor: 'border-purple-500',
       iconColor: 'text-purple-600'
+    },
+    ILLAM: {
+      name: 'ILLAM',
+      icon: Home,
+      primaryColor: 'emerald',
+      secondaryColor: 'teal',
+      lightBg: 'bg-emerald-50',
+      mediumBg: 'bg-emerald-100',
+      darkBg: 'bg-emerald-200',
+      textPrimary: 'text-emerald-700',
+      textSecondary: 'text-emerald-600',
+      gradientFrom: 'from-emerald-500',
+      gradientTo: 'to-teal-500',
+      borderColor: 'border-emerald-500',
+      iconColor: 'text-emerald-600'
     }
   } as const;
 

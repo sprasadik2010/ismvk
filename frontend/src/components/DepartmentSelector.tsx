@@ -10,14 +10,14 @@ interface Props {
 export const DepartmentSelector: React.FC<Props> = ({ selected, onChange }) => {
   const departments: { value: Department; label: string; icon: React.ReactNode }[] = [
     {
-      value: 'ILLAM',
-      label: 'ILLAM',
-      icon: <Home className="w-4 h-4" />
-    },
-    {
       value: 'AMBALAM',
       label: 'AMBALAM',
       icon: <Building2 className="w-4 h-4" />
+    },
+    {
+      value: 'ILLAM',
+      label: 'ILLAM',
+      icon: <Home className="w-4 h-4" />
     }
   ];
 
